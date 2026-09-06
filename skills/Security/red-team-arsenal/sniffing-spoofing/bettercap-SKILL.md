@@ -1,0 +1,62 @@
+---
+name: bettercap
+description: Swiss Army knife: MITM, monitoring, attack framework
+category: red-team-arsenal/sniffing-spoofing
+tags: [pentesting, sniffing spoofing, kali-linux, bettercap]
+author: auto-generated
+created: 2026-09-04
+---
+
+# BETTERCAP
+
+**Category:** Sniffing Spoofing  
+**Description:** Swiss Army knife: MITM, monitoring, attack framework
+
+## Installation
+
+```bash
+# Kali Linux
+sudo apt-get update && sudo apt-get install -y bettercap
+
+# Check installation
+which bettercap
+bettercap --version || bettercap -h
+```
+
+## Basic Usage
+
+```bash
+# Get help
+bettercap --help
+bettercap -h
+
+# Common usage patterns will be updated after first use
+```
+
+## Key Features
+
+- Part of Kali Linux sniffing spoofing toolkit
+- Industry-standard pentesting tool
+- Active development and community support
+
+## Common Workflows
+
+*This section will be populated after tool usage and research*
+
+## Pitfalls
+
+- Always verify target authorization before scanning
+- Some tools generate significant network traffic
+- Check local laws regarding security testing
+- Maintain operational security when running tools
+
+## Resources
+
+- Kali Tools: https://www.kali.org/tools/bettercap/
+- Official Documentation: Search for "bettercap official documentation"
+- Exploit-DB: https://www.exploit-db.com/
+
+## Notes
+
+- Auto-generated skill, will be enriched with usage patterns
+- Last updated: 2026-09-04

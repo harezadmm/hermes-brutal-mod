@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Router - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: #1e293b;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e2e8f0;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-subtext {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .chart-container {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .upstream-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .upstream-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .upstream-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upstream-url {
+            font-family: 'Courier New', monospace;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        
+        .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🚀 API Router</div>
+        <span id="username">User</span>
+    </nav>
+    
+    <div class="container">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">💰 Total Balance</div>
+                <div class="stat-value" id="totalBalance">337,425</div>
+                <div class="stat-subtext">≈ Rp 675</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">📊 Total Usage</div>
+                <div class="stat-value" id="totalUsage">141,437,686</div>
+                <div class="stat-subtext">699,060,040 tokens</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">📈 Total Requests</div>
+                <div class="stat-value" id="totalRequests">6,881</div>
+                <div class="stat-subtext">Last 30 days</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">🔑 Active Upstreams</div>
+                <div class="stat-value" id="activeUpstreams">5</div>
+                <div class="stat-subtext">All online</div>
+            </div>
+        </div>
+        
+        <!-- Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div>
+                    <div class="chart-title">Credit Consumption</div>
+                    <div style="color: #94a3b8; font-size: 0.875rem;">Last 24 Hours</div>
+                </div>
+                <button class="btn" onclick="refreshStats()">🔄 Refresh</button>
+            </div>
+            <canvas id="usageChart" height="80"></canvas>
+        </div>
+        
+        <!-- Supported Upstreams -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">🌐 Supported Routers</div>
+            </div>
+            
+            <div class="upstream-grid">
+                <div class="upstream-card">
+                    <div class="upstream-name">✅ LapakVIP Router</div>
+                    <div class="upstream-url">router.lapakvip.com</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">API Key: lv-xxx</div>
+                    <span class="status-badge">Online</span>
+                </div>
+                
+                <div class="upstream-card">
+                    <div class="upstream-name">✅ Moyra API</div>
+                    <div class="upstream-url">api.moyra.my.id/v1</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">API Key: sk-xxx, moyra-xxx</div>
+                    <span class="status-badge">Online</span>
+                </div>
+                
+                <div class="upstream-card">
+                    <div class="upstream-name">✅ MarketKU Router</div>
+                    <div class="upstream-url">router.marketku.id/v1</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">API Key: mk-xxx</div>
+                    <span class="status-badge">Online</span>
+                </div>
+                
+                <div class="upstream-card">
+                    <div class="upstream-name">✅ YogaTheDev API</div>
+                    <div class="upstream-url">ai.yogathedev.com/v1</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">API Key: ytd-xxx</div>
+                    <span class="status-badge">Online</span>
+                </div>
+                
+                <div class="upstream-card">
+                    <div class="upstream-name">✅ KaoruStore Router</div>
+                    <div class="upstream-url">router.kaorustore.web.id/v1</div>
+                    <div style="margin-top: 0.5rem; color: #94a3b8; font-size: 0.875rem;">API Key: ks-xxx</div>
+                    <span class="status-badge">Online</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Chart data
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        
+        const chartData = {
+            labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+            datasets: [{
+                label: 'Credits',
+                data: [
+                    120, 340, 180, 520, 890, 1240, 1580, 1820, 2150, 2380, 2100, 1890,
+                    1650, 2240, 1980, 1560, 1340, 980, 760, 1120, 1580, 2340, 1890, 1240
+                ],
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointRadius: 3,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#667eea',
+                pointBorderColor: '#1e293b',
+                pointBorderWidth: 2
+            }]
+        };
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: '#1e293b',
+                        titleColor: '#e2e8f0',
+                        bodyColor: '#94a3b8',
+                        borderColor: '#334155',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+        
+        function refreshStats() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

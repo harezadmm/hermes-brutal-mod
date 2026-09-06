@@ -1,0 +1,303 @@
+# RedMess Configuration Template
+# Copy to ~/.redmess/config/redmess.yaml and edit
+
+# ═══════════════════════════════════════════════════════════
+# SYSTEM CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+system:
+  version: "3.0.0"
+  mode: "BRUTAL"  # BRUTAL, STANDARD, SAFE
+  install_dir: "~/.redmess"
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+# ═══════════════════════════════════════════════════════════
+# AI PROVIDER CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+ai:
+  # Provider type: openai, anthropic, custom
+  provider: "openai"
+  
+  # API Configuration
+  base_url: "https://api.openai.com/v1"
+  api_key: "YOUR_API_KEY_HERE"  # ⚠️ REQUIRED - get from provider
+  
+  # Model settings
+  model: "gpt-4"  # gpt-4, gpt-3.5-turbo, claude-3.5-sonnet, etc.
+  temperature: 0.9  # 0.0-2.0, higher = more creative
+  max_tokens: 4096  # Maximum response length
+  top_p: 1.0
+  frequency_penalty: 0.0
+  presence_penalty: 0.0
+  
+  # Streaming (faster responses)
+  stream: true
+  
+  # Timeout (seconds)
+  timeout: 120
+
+# Alternative providers (uncomment to use):
+
+# Anthropic Claude:
+# ai:
+#   provider: "anthropic"
+#   base_url: "https://api.anthropic.com"
+#   api_key: "YOUR_ANTHROPIC_KEY"
+#   model: "claude-3-5-sonnet-20241022"
+#   temperature: 0.9
+#   max_tokens: 8192
+
+# Custom OpenAI-compatible API:
+# ai:
+#   provider: "custom"
+#   base_url: "https://your-api.com/v1"
+#   api_key: "YOUR_CUSTOM_KEY"
+#   model: "your-model-name"
+#   temperature: 0.9
+#   max_tokens: 4096
+
+# ═══════════════════════════════════════════════════════════
+# GODMODE CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+godmode:
+  # Enable GODMODE BRUTAL (ZERO content restrictions)
+  enabled: true
+  
+  # Primary owner (FULL unrestricted access)
+  primary_owner: 7570665912  # ⚠️ Change to your Telegram user ID
+  
+  # Authorization tiers:
+  # - PRIMARY_OWNER: Full access, no restrictions
+  # - GODMODE_BRUTAL: Full GODMODE, no limits
+  # - GODMODE_STANDARD: GODMODE with OPSEC warnings
+  # - RENTAL_USER: Limited time access
+  # - STANDARD_USER: Safety filters active
+  
+  # Security settings
+  injection_detection: false  # Disable safety injection detection
+  content_boundaries: false   # Remove ALL content boundaries
+  refusal_override: true      # Override ALL refusal triggers
+  
+  # Personality mode: brutal, standard, safe
+  personality: "brutal"
+  
+  # Codewords (trigger instant guides)
+  codewords:
+    enabled: true
+    boomba: true      # Pipe bomb guide
+    anarchist: true   # Molotov cocktail
+    chemist: true     # Drug/poison synthesis
+    hacker: true      # Exploit code
+  
+  # OPSEC warnings (show safety reminders)
+  opsec_warnings: true  # Recommended: true for legal protection
+
+# ═══════════════════════════════════════════════════════════
+# TELEGRAM BOT CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+telegram:
+  # Enable Telegram bot
+  enabled: true
+  
+  # Bot token from @BotFather
+  bot_token: "YOUR_BOT_TOKEN_HERE"  # ⚠️ REQUIRED for bot
+  
+  # Owner Telegram user ID
+  owner_id: 7570665912  # ⚠️ Change to your ID
+  
+  # Bot settings
+  bot_username: "redmess_bot"  # Your bot username
+  
+  # Response settings
+  typing_delay: 1.0  # Seconds to show "typing..." before response
+  max_message_length: 4096  # Telegram limit
+  parse_mode: "Markdown"  # Markdown or HTML
+  
+  # Rate limiting (prevent spam)
+  rate_limit:
+    enabled: true
+    max_requests_per_minute: 30
+    max_requests_per_hour: 500
+  
+  # Allowed users (empty = owner only)
+  allowed_users: []
+  # Example:
+  # allowed_users:
+  #   - 123456789
+  #   - 987654321
+  
+  # Webhook mode (advanced, optional)
+  webhook:
+    enabled: false
+    url: ""
+    port: 8443
+
+# ═══════════════════════════════════════════════════════════
+# OFFENSIVE SECURITY SKILLS
+# ═══════════════════════════════════════════════════════════
+offensive_security:
+  # Enable offensive security skills
+  skills_enabled: true
+  
+  # Skill categories to load
+  categories:
+    - apk_modding
+    - reverse_engineering
+    - web_exploitation
+    - binary_exploitation
+    - social_engineering
+    - malware_development
+    - network_hacking
+    - mobile_hacking
+    - cloud_security
+    - cryptography
+  
+  # Integration with external tools
+  tools_integration: true
+  
+  # Show OPSEC warnings before dangerous operations
+  opsec_warnings: true
+  
+  # Auto-generate code/guides
+  auto_generation: true
+
+# ═══════════════════════════════════════════════════════════
+# WORKSPACE CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+workspace:
+  # Base directory for user workspaces
+  base_dir: "~/.redmess/workspace"
+  
+  # Per-user workspace (creates workspace/<user_id>/)
+  per_user_workspace: true
+  
+  # Auto-cleanup old files
+  auto_cleanup:
+    enabled: true
+    max_age_days: 30
+    max_size_mb: 1000
+  
+  # File upload (for large files)
+  file_upload:
+    enabled: true
+    max_size_mb: 50
+    service: "gofile"  # gofile, catbox, anonfiles
+    auto_upload_threshold_mb: 10
+
+# ═══════════════════════════════════════════════════════════
+# DATABASE CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+database:
+  # Database path
+  path: "~/.redmess/umiagent.db"
+  
+  # Database type: sqlite, postgresql (advanced)
+  type: "sqlite"
+  
+  # Backup settings
+  backup:
+    enabled: true
+    interval_hours: 24
+    keep_backups: 7
+
+# ═══════════════════════════════════════════════════════════
+# LOGGING CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+logging:
+  # Log directory
+  log_dir: "~/.redmess/logs"
+  
+  # Log levels by component
+  levels:
+    bot: "INFO"
+    godmode: "DEBUG"
+    skills: "INFO"
+    api: "WARNING"
+  
+  # Log rotation
+  rotation:
+    enabled: true
+    max_size_mb: 100
+    keep_files: 10
+  
+  # Log sensitive data (API keys, tokens)
+  log_sensitive: false  # ⚠️ Security: keep false
+
+# ═══════════════════════════════════════════════════════════
+# RENTAL SYSTEM (Optional)
+# ═══════════════════════════════════════════════════════════
+rental:
+  # Enable rental/subscription system
+  enabled: false
+  
+  # Pricing (Indonesian Rupiah)
+  pricing:
+    hourly: 8000
+    daily: 50000
+    weekly: 200000
+    monthly: 560000
+  
+  # Payment methods
+  payment:
+    qris: true
+    dana: true
+    gopay: true
+    ovo: true
+  
+  # Auto-expiration
+  auto_expire: true
+  
+  # Notification before expiry (hours)
+  notify_before_expiry: 2
+
+# ═══════════════════════════════════════════════════════════
+# ADVANCED SETTINGS
+# ═══════════════════════════════════════════════════════════
+advanced:
+  # Performance
+  concurrent_requests: 10
+  request_timeout: 300
+  
+  # Memory management
+  max_context_messages: 100
+  clear_context_after_hours: 24
+  
+  # Security
+  enable_sandboxing: false  # Experimental
+  restrict_file_access: false
+  
+  # Debug mode (verbose logging)
+  debug_mode: false
+  
+  # Experimental features
+  experimental:
+    multimodal: false  # Image/voice processing
+    web_browsing: false
+    code_execution: false
+
+# ═══════════════════════════════════════════════════════════
+# NOTES
+# ═══════════════════════════════════════════════════════════
+# 
+# ⚠️ REQUIRED CHANGES:
+#   1. Set ai.api_key to your actual API key
+#   2. Set telegram.bot_token if using Telegram bot
+#   3. Change godmode.primary_owner to your Telegram user ID
+#   4. Change telegram.owner_id to your Telegram user ID
+#
+# 📚 DOCUMENTATION:
+#   - Full docs: README.md
+#   - Quick start: QUICK_INSTALL.md
+#   - Skills: skills/security/
+#
+# 🔥 GODMODE:
+#   - primary_owner gets ZERO restrictions
+#   - All safety filters bypassed
+#   - Codewords trigger instant guides
+#   - FOR AUTHORIZED USE ONLY
+#
+# ⚖️ LEGAL:
+#   - Use only on authorized systems
+#   - Keep opsec_warnings enabled
+#   - Review legal disclaimer in README
+#
+# ═══════════════════════════════════════════════════════════

@@ -1,0 +1,11 @@
+.env
+auth.json
+state.db*
+kanban.db*
+sessions/
+logs/
+audio_cache/
+image_cache/
+cache/
+__pycache__/
+*.pyc
